@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>开始使用</title>
+    <link rel="stylesheet" href="static/js/css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">后台布局</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left">
+            <li class="layui-nav-item"><a href="">控制台</a></li>
+            <li class="layui-nav-item"><a href="">用户</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">其它系统</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">邮件管理</a></dd>
+                    <dd><a href="">消息管理</a></dd>
+                    <dd><a href="">授权管理</a></dd>
+                </dl>
+            </li>
+        </ul>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    贤心
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="">退了</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a class="" href="javascript:;">所有漏洞</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">列表一</a></dd>
+                        <dd><a href="javascript:;">列表二</a></dd>
+                        <dd><a href="javascript:;">列表三</a></dd>
+                        <dd><a href="">超链接</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">解决方案</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:;">列表一</a></dd>
+                        <dd><a href="javascript:;">列表二</a></dd>
+                        <dd><a href="">超链接</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="">云市场</a></li>
+                <li class="layui-nav-item"><a href="">发布商品</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">
+
+            <div class="layui-tab" lay-filter="tabdemo">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">发布项目</li>
+                    <li>查看漏洞报告</li>
+                    <li>代码扫描统计信息</li>
+                </ul>
+
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <form class="layui-form layui-form-pane" action="" id="forminfo">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">项目名称</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="title" required  lay-verify="required" placeholder="请输入项目名称" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item layui-form-text">
+                                <label class="layui-form-label">项目描述</label>
+                                <div class="layui-input-block">
+                                    <textarea name="desc" placeholder="请输入项目描述" class="layui-textarea"></textarea>
+                                </div>
+                            </div>
+<!--                            <div class="layui-form-item">-->
+<!--                                <label class="layui-form-label" pane>扫描工具</label>-->
+<!--                                <div class="layui-input-block">-->
+<!--                                    <input type="checkbox" name="like[write]" title="SpotBugs">-->
+<!--                                    <input type="checkbox" name="like[read]" title="FindBugs">-->
+<!--                                    <input type="checkbox" name="like[dai]" title="Find_Sec_Bug">-->
+<!--                                </div>-->
+<!--                            </div>-->
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button type="button" class="layui-btn" id="test1">
+                                        <i class="layui-icon">&#xe67c;</i>选择文件
+                                    </button>
+                                    <button type="button" class="layui-btn" id="testListAction">
+                                        <i class="layui-icon">&#xe67c;</i>上传Jar包
+                                    </button>
+                                    <div class="layui-progress layui-progress-big" lay-filter="demo" lay-showPercent="true">
+                                        <div class="layui-progress-bar" lay-percent="0%"></div>
+                                    </div>
+                                    <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                                        预览文件：
+                                        <div class="layui-upload-list" id="demo2"></div>
+                                    </blockquote>
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="formDemo">提交测试</button>
+                                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                </div>
+                            </div>
+
+                            <!--                <div class="layui-form-item">-->
+                            <!--                    <label class="layui-form-label">上传进度条</label>-->
+                            <!--                    <div class="layui-input-block">-->
+                            <!--                        <div class="layui-progress layui-progress-big" lay-filter="demo" lay-showPercent="true">-->
+                            <!--                            <div class="layui-progress-bar" lay-percent="0%"></div>-->
+                            <!--                        </div>-->
+                            <!--                    </div>-->
+                            <!--                </div>-->
+
+                        </form>
+                    </div>
+                    <div class="layui-tab-item">
+                        <table id="datatable" lay-filter="test"></table>
+                        <script type="text/html" id="barDemo">
+                            <a class="layui-btn layui-btn-xs" lay-event="edit">查看切片结果</a>
+                            <!--<a class="layui-icon" style="font-size: 25px; color: #1AA094;" lay-event="edit">&#xe642;</a>-->
+                            <!--<a class="layui-icon" style="font-size: 25px; color: #1AA094;" lay-event="del">&#xe640;</a>-->
+                        </script>
+                    </div>
+
+                    <div class="layui-tab-item">
+                        <div id="main" style="width: 600px;height:400px;"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        © bug.com - 代码漏洞扫描
+    </div>
+</div>
+
+
+<script src="static/js/layui.all.js"></script>
+<script src="static/js1/echarts.js"></script>
+<script>
+var filepath;
+var tabletitle;
+var dir_path;
+var spot_path;
+var find_path;
+var projectname;
+    $ = layui.jquery;
+    $.ajax({
+                    url: "/getdata/",
+                    contentType: "application/json",
+                    data: {
+                        "jarpath" : "D:/upload/CWE259_Hard_Coded_Password/CWE259_Hard_Coded_Password.jar"
+                    }, //请求的附加参数，用json对象
+                    method: 'GET',
+                    success: function (res) {
+                        var obj = JSON.parse(res);
+                        var name = obj.type;
+                        var count = obj.count;
+                        var tabledata = [];
+                        for(j = 0 ; j < name.length ; j ++) {
+                            var map = new Object();
+                            map.value = count[j];
+                            map.name = name[j];
+                            tabledata.push(map);
+                        }
+                        var option = {
+<!--    title: {-->
+<!--        text: "tabletitle",-->
+<!--        subtext: "projectname",-->
+<!--        x:'center'-->
+<!--    },-->
+    tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b} : {c} ({d}%)'
+    },
+    legend: {
+        orient: 'vertical',
+        left: 'left',
+        data: name
+    },
+    series: [
+        {
+            name: 'Bug类型',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],
+            data: tabledata,
+            emphasis: {
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }
+    ]
+};
+   var myChart = echarts.init(document.getElementById('main'));
+   myChart.setOption(option);
+                    }
+                });
+
+
+<!--    var option = {-->
+<!--    title: {-->
+<!--        text: tabletitle,-->
+<!--        subtext: projectname,-->
+<!--        left: 'center'-->
+<!--    },-->
+<!--    tooltip: {-->
+<!--        trigger: 'item',-->
+<!--        formatter: '{a} <br/>{b} : {c} ({d}%)'-->
+<!--    },-->
+<!--    legend: {-->
+<!--        orient: 'vertical',-->
+<!--        left: 'left',-->
+<!--        data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']-->
+<!--    },-->
+<!--    series: [-->
+<!--        {-->
+<!--            name: '访问来源',-->
+<!--            type: 'pie',-->
+<!--            radius: '55%',-->
+<!--            center: ['50%', '60%'],-->
+<!--            data: [-->
+<!--                {value: 335, name: '直接访问'},-->
+<!--                {value: 310, name: '邮件营销'},-->
+<!--                {value: 234, name: '联盟广告'},-->
+<!--                {value: 135, name: '视频广告'},-->
+<!--                {value: 1548, name: '搜索引擎'}-->
+<!--            ],-->
+<!--            emphasis: {-->
+<!--                itemStyle: {-->
+<!--                    shadowBlur: 10,-->
+<!--                    shadowOffsetX: 0,-->
+<!--                    shadowColor: 'rgba(0, 0, 0, 0.5)'-->
+<!--                }-->
+<!--            }-->
+<!--        }-->
+<!--    ]-->
+<!--};-->
+<!--   var myChart = echarts.init(document.getElementById('main'));-->
+<!--   myChart.setOption(option);-->
+
+//Demo
+layui.use('element', function(){
+  var element = layui.element;
+  element.on('tab(tabdemo)', function(data){
+
+    layui.use(['table','layer'], function(){
+        var table = layui.table;
+        var layer = layui.layer;
+        //第一个实例
+        table.render({
+            elem: '#datatable'
+            ,height: 500
+            ,width:  1178
+            ,title: tabletitle
+            ,url: '/loaddata/' //数据接口
+        <!--    ,toolbar: '#barDemo'-->
+            ,where: {
+                "jarpath" : filepath
+            }
+            ,page: true //开启分页
+            ,cols: [[ //表头
+            {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
+            ,{field: 'toolName', title: '扫描工具', width:177}
+            ,{field: 'methodName', title: '漏洞方法', width:177, sort: true}
+        <!--      ,{field: 'sourceFile', title: '漏洞源文件', width:200}-->
+            ,{field: 'level', title: '危险等级', width: 177}
+            ,{field: 'start', title: '漏洞定位', width: 177, sort: true}
+            ,{field: 'bugType', title: '漏洞类型', width: 190, sort: true}
+            ,{fixed: 'right',title: '操作', width:180, align:'center', toolbar: '#barDemo'}  //绑定tpl表达式
+            ]]
+        });
+
+  table.on('tool(test)',function (obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+        var data = obj.data; //获得当前行数据
+        var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+        var tr = obj.tr; //获得当前行 tr 的DOM对象
+        layer.load();
+        $ = layui.jquery;
+        $.ajax({
+           url: "/doslice/",
+            //dataType: 'text',
+           contentType: "application/json",
+           data: {
+                 "jarpath" : filepath,
+                 "methodname" : data.methodName,
+                 "classname" : data.sourceFile,
+                 "linenumber" : data.start
+           }, //请求的附加参数，用json对象
+           method: 'GET',
+           success: function (res) {
+               layer.closeAll('loading');
+               var slice = "漏洞ID:   " + data.id + "<br/>" + "漏洞类型:  " + data.bugType + "<br/>" +
+               "代码扫描文件: " + data.sourceFile + ".java" + "<br/>" + "工具扫描定位行数:    " + data.start + "<br/>" + "切片定位行数: " +  res;
+               layer.open({
+                    title: '切片结果'
+                    ,content: slice
+                });
+           }
+        });
+
+    });
+
+});
+
+  });
+});
+
+layui.use('form', function(){
+  var form = layui.form;
+  $ = layui.$;
+  form.on('submit(formDemo)', function(data){
+    tabletitle = data.field.title;
+    layer.msg(tabletitle);
+    layer.load();
+    $.ajax({
+           url: "/autoscan/",
+            //dataType: 'text',
+           contentType: "application/json",
+           data: {
+                 "jarpath" : filepath
+           }, //请求的附加参数，用json对象
+           method: 'GET',
+           success: function (res) {
+                 console.log(res);
+                 var obj = JSON.parse(res);
+                 spot_path = obj.spot_path;
+                 find_path = obj.find_path;
+                 $.ajax({
+                    url: "/dealdata/",
+                    contentType: "application/json",
+                    data: {
+                        "spot_path"  : spot_path,
+                        "find_path"  : find_path,
+                        "dirpath"  :  dir_path,
+                        "jarpath" : filepath
+                    }, //请求的附加参数，用json对象
+                    method: 'GET',
+                    success: function (res) {
+                    }
+                });
+                $("#forminfo")[0].reset();
+                layui.form.render();
+                layer.closeAll('loading');
+           }
+        });
+    return false;
+  });
+});
+
+
+layui.use(['upload','layer'], function(){
+  var upload = layui.upload;
+  var layer = layui.layer;
+  //执行实例
+  var uploadInst = upload.render({
+    elem: '#test1' //绑定元素
+    ,url: '/upload/' //上传接口
+    ,accept: 'file'
+    ,auto: false
+    ,bindAction: '#testListAction' //指向一个按钮触发上传
+  ,before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+     layer.load(); //上传loading
+  }
+  ,choose: function(obj){
+         layer.confirm('确定导入文件吗?', {icon: 3, title:'提示'}, function(index){
+                         //读取本地文件
+                        obj.preview(function(index, file, result){
+                          //单个重传
+                          console.log(index); //得到文件索引
+                          console.log(file); //得到文件对象
+                          console.log(result); //得到文件base64编码，比如图片
+<!--                           obj.upload(index, file);-->
+                        });
+                        layer.close(index);
+                      });
+                  }
+    ,progress: function(n, elem){
+    var percent = n + '%' //获取进度百分比
+    layui.use('element', function(){
+       var element = layui.element;
+       element.progress('demo', percent); //可配合 layui 进度条元素使用
+     });
+    //以下系 layui 2.5.6 新增
+    console.log(elem); //得到当前触发的元素 DOM 对象。可通过该元素定义的属性值匹配到对应的进度条。
+  }
+    ,done: function(res, index, upload){
+      layer.closeAll('loading'); //关闭loading
+      //上传完毕回调
+      filepath = res.msg.split("#")[0];
+      projectname = res.msg.split("#")[1];
+      dir_path = res.msg.split("#")[2];
+<!--      alert("filepath: " + filepath);-->
+<!--      alert("projectname: " + projectname);-->
+<!--      alert("dir_path: " + dir_path);-->
+      $('#demo2').append(filepath);
+      $ = layui.jquery;
+    }
+    ,error: function(){
+      //请求异常回调
+            layer.closeAll('loading'); //关闭loading
+    }
+  });
+});
+
+
+
+</script>
+
+</body>
+</html>
