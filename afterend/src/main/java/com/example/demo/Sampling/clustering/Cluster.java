@@ -3,7 +3,7 @@ package com.example.demo.Sampling.clustering;
 
 
 
-import com.example.demo.Tool.Vulnerability;
+import com.example.demo.Entity.Vulnerability;
 
 import java.util.ArrayList;
 

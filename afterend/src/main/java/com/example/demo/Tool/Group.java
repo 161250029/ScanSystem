@@ -2,35 +2,46 @@ package com.example.demo.Tool;
 
 public class Group {
 
-    public String id;
-    public int size;
+    public String taskid;
+    public int tasksize;
+    public int taskprocess;
     public String mode;
 
-    public Group(String id, int size, String mode) {
-        this.id = id;
-        this.size = size;
+    public Group(String taskid, int tasksize, int taskprocess, String mode) {
+        this.taskid = taskid;
+        this.tasksize = tasksize;
+        this.taskprocess = taskprocess;
         this.mode = mode;
     }
 
-    public Group(String id, int size) {
-        this.id = id;
-        this.size = size;
+    public Group(String taskid, int tasksize, int taskprocess) {
+        this.taskid = taskid;
+        this.tasksize = tasksize;
+        this.taskprocess = taskprocess;
     }
 
-    public String getId() {
-        return id;
+    public int getTaskprocess() {
+        return taskprocess;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setTaskprocess(int taskprocess) {
+        this.taskprocess = taskprocess;
     }
 
-    public int getSize() {
-        return size;
+    public String getTaskid() {
+        return taskid;
     }
 
-    public void setSize(int size) {
-        this.size = size;
+    public void setTaskid(String taskid) {
+        this.taskid = taskid;
+    }
+
+    public int getTasksize() {
+        return tasksize;
+    }
+
+    public void setTasksize(int tasksize) {
+        this.tasksize = tasksize;
     }
 
     public String getMode() {

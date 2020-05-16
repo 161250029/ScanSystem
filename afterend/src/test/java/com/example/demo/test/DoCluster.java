@@ -1,6 +1,8 @@
 package com.example.demo.test;
 
+import com.example.demo.Service.VulnerServiceImpl;
 import com.example.demo.ServiceInterface.DoClusterService;
+import com.example.demo.ServiceInterface.VulnerService;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,13 +18,28 @@ public class DoCluster {
     @Autowired
     private DoClusterService doClusterService;
 
+    @Autowired
+    VulnerService vulnerService;
+
+
+//    @Test
+//    public void test1() {
+//        doClusterService.doClusterService();
+//    }
+
+
 
     @Test
-    public void test1() {
-        doClusterService.doClusterService();
+    public void test2() {
+
+//        VulnerServiceImpl vul = new VulnerServiceImpl();
+
+        String path = "C:\\Users\\ningl\\Desktop\\BugSlice";
+        vulnerService.readDataset(path);
+
+        doClusterService.clustering();
+
     }
-
-
 
 
 

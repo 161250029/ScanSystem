@@ -34,7 +34,7 @@ public class GetCodeImpl implements GetCodeService {
         path = "/root"+tmp1;
 ////        path = "/root"+path;
 //        System.out.println("??? ");
-        System.out.println("path3: "+path);
+//        System.out.println("path3: "+path);
 
         File file = new File(path);
         String content = "";
@@ -54,22 +54,18 @@ public class GetCodeImpl implements GetCodeService {
     }
 
     @Override
-    public void dataUpdate(String id, boolean res) {
-        id = id.substring(1, id.length()-1);
+    public void probUpdate(String id, double prob) {
         System.out.println("Now: "+ id);
         Long dataid = Long.valueOf(id);
 
         Bug bug = bugDao.findById(dataid).get();
-
-        System.out.println("Before: "+ bug.isEdit + " Now: "+ res);
-        bug.isEdit = res;
+        bug.setProbability(prob);
         bugDao.saveAndFlush(bug);
-
     }
 
     @Override
     public List<Bug> getBugs(String id) {
-        System.out.println("id "+id);
+        System.out.println("taskid "+id);
         if(null == id){
             return bugDao.findAll();
         }
@@ -97,7 +93,7 @@ public class GetCodeImpl implements GetCodeService {
             bug.setThreatlevel(Integer.parseInt(level));
         }
         bug.setComment(comments);
-        bug.setEdit(true);
+        bug.setReviewed(true);
         bugDao.saveAndFlush(bug);
     }
 
@@ -160,8 +156,10 @@ public class GetCodeImpl implements GetCodeService {
             int size = groups.get(key).size();
             Map<String, Integer> map = new HashMap<>();
             List<Bug> subbug = groups.get(key);
+            int taskprocess = 0;
             for (Bug bug : subbug) {
                 map.put(bug.getType(), map.getOrDefault(bug.getType(), 0) + 1);
+                if(bug.isReviewed == true) taskprocess++;
             }
             String mode = "";
             int tmp = 0;
@@ -171,13 +169,37 @@ public class GetCodeImpl implements GetCodeService {
                     mode = subkey;
                 }
             }
-            res.add(new Group(key, size, mode));
+            res.add(new Group(key, size, taskprocess, mode));
 
         }
-
-        System.out.println("size: "+ res.size());
-        System.out.println("sample: "+ res.get(0).id);
-        System.out.println("size: "+ res.get(0).mode);
+//        System.out.println("tasksize: "+ res.tasksize());
+//        System.out.println("sample: "+ res.get(0).taskid);
+//        System.out.println("tasksize: "+ res.get(0).mode);
         return res;
+    }
+
+    @Override
+    public Bug getOneBug(String id) {
+        Long bugid = Long.valueOf(id);
+        Bug bug = bugDao.findById(bugid).get();
+        return bug;
+    }
+
+    @Override
+    public void reviewPass(String id) {
+        Long dataid = Long.valueOf(id);
+        Bug bug = bugDao.findById(dataid).get();
+        bug.isReviewed = true;
+        bug.isFalse = false;
+        bugDao.saveAndFlush(bug);
+    }
+
+    @Override
+    public void reviewFalse(String id) {
+        Long dataid = Long.valueOf(id);
+        Bug bug = bugDao.findById(dataid).get();
+        bug.isReviewed = true;
+        bug.isFalse = true;
+        bugDao.saveAndFlush(bug);
     }
 }

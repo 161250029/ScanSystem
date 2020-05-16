@@ -10,7 +10,7 @@ import java.util.List;
 public interface GetCodeService {
     public String getCodeService(String id, String path);
 
-    public void dataUpdate(String id, boolean res);
+    public void probUpdate(String id, double prob);
 
     public List<Bug> getBugs(String groupid);
 
@@ -19,4 +19,10 @@ public interface GetCodeService {
     public List<Type> getstatics();
 
     public List<Group> getGroups();
+
+    public Bug getOneBug(String id);
+
+    public void reviewPass(String id);
+
+    public void reviewFalse(String id);
 }

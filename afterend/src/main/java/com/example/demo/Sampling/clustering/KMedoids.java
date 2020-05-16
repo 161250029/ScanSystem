@@ -3,14 +3,13 @@ package com.example.demo.Sampling.clustering;
 
 import com.example.demo.Sampling.CodeSimilarity;
 import com.example.demo.Sampling.CosineSimilarity;
-import com.example.demo.Tool.Vulnerability;
+import com.example.demo.Entity.Vulnerability;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class KMedoids {
-    String url = "templates/data/HEART_Stat.arff";
     public double[][] sim;
     public List<Vulnerability> samples;
     public ArrayList<Cluster> clusterList;

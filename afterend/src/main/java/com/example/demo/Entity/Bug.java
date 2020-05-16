@@ -16,24 +16,37 @@ public class Bug {
     private String location;
     private String code;
     public double probability;
-    public boolean isEdit;
+    public boolean isReviewed; //是否已审核
     private String comment;
     private String cluster;
 
+    public boolean isFalse; // 是否误报，0为初始，1为误报
 
-    public Bug(Long id, int threatlevel, String type, String location, String code, double probability, boolean isEdit, String comment, String cluster) {
+
+
+    public Bug(Long id, int threatlevel, String type, String location, String code, double probability, boolean isReviewed, String comment, String cluster) {
         this.id = id;
         this.threatlevel = threatlevel;
         this.type = type;
         this.location = location;
         this.code = code;
         this.probability = probability;
-        this.isEdit = isEdit;
+        this.isReviewed = isReviewed;
         this.comment = comment;
         this.cluster = cluster;
     }
 
     public Bug() {
+    }
+
+    public Bug(Long id, int threatlevel, String type, String location, String code) {
+        this.id = id;
+        this.threatlevel = threatlevel;
+        this.type = type;
+        this.location = location;
+        this.code = code;
+        this.isReviewed = false;
+        this.isFalse = true;
     }
 
     public Bug(Long id, int threatlevel, String type, String location, String code, double probability) {
@@ -43,18 +56,32 @@ public class Bug {
         this.location = location;
         this.code = code;
         this.probability = probability;
+        this.isReviewed = false;
+        this.isFalse = true;
     }
 
-    public Bug(Long id, int threatlevel, String type, String location, String code, double probability, boolean isEdit) {
+    public Bug(Long id, int threatlevel, String type, String location, String code, double probability, boolean isReviewed) {
         this.id = id;
         this.threatlevel = threatlevel;
         this.type = type;
         this.location = location;
         this.code = code;
         this.probability = probability;
-        this.isEdit = isEdit;
+        this.isReviewed = isReviewed;
     }
 
+    public Bug(Long id, int threatlevel, String type, String location, String code, double probability, boolean isReviewed, String comment, String cluster, boolean isFalse) {
+        this.id = id;
+        this.threatlevel = threatlevel;
+        this.type = type;
+        this.location = location;
+        this.code = code;
+        this.probability = probability;
+        this.isReviewed = isReviewed;
+        this.comment = comment;
+        this.cluster = cluster;
+        this.isFalse = isFalse;
+    }
 
     public Long getId() {
         return id;
@@ -104,12 +131,12 @@ public class Bug {
         this.probability = probability;
     }
 
-    public boolean isEdit() {
-        return isEdit;
+    public boolean isReviewed() {
+        return isReviewed;
     }
 
-    public void setEdit(boolean edit) {
-        isEdit = edit;
+    public void setReviewed(boolean reviewed) {
+        isReviewed = reviewed;
     }
 
     public String getComment() {
@@ -126,5 +153,13 @@ public class Bug {
 
     public void setCluster(String cluster) {
         this.cluster = cluster;
+    }
+
+    public boolean isFalse() {
+        return isFalse;
+    }
+
+    public void setFalse(boolean aFalse) {
+        isFalse = aFalse;
     }
 }

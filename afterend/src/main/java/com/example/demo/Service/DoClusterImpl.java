@@ -2,13 +2,14 @@ package com.example.demo.Service;
 
 import com.example.demo.Dao.BugDao;
 
+import com.example.demo.Dao.VulnerabilityDao;
 import com.example.demo.Entity.Bug;
 import com.example.demo.Sampling.Sampling;
 
 import com.example.demo.Sampling.clustering.Cluster;
 import com.example.demo.ServiceInterface.DoClusterService;
 import com.example.demo.Tool.SimCode;
-import com.example.demo.Tool.Vulnerability;
+import com.example.demo.Entity.Vulnerability;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,8 @@ import java.util.*;
 public class DoClusterImpl implements DoClusterService {
     @Autowired
     private BugDao bugDao;
+    @Autowired
+    public VulnerabilityDao vulDao;
 
     public List<List<String>> datalist = new ArrayList<>();
 
@@ -31,7 +34,7 @@ public class DoClusterImpl implements DoClusterService {
         getFileList(filedir);
         List<Vulnerability> samples = new ArrayList<Vulnerability>();
         for(List<String> bugs : datalist){
-            String id = bugs.get(0);
+            Long id = Long.valueOf(bugs.get(0));
             int threatlevel = Integer.valueOf(bugs.get(2));
             String type = bugs.get(1);
             String location = bugs.get(3);
@@ -79,6 +82,37 @@ public class DoClusterImpl implements DoClusterService {
         }
 
         System.out.println("END");
+    }
+
+    @Override
+    public void clustering() {
+
+
+        List<Vulnerability> vulList = vulDao.findAll();
+        System.out.println("count1: " + vulList.size());
+        ArrayList<Vulnerability> arrayList_sublist = new ArrayList<Vulnerability>();
+        for(int i=0;i<=500;i++){
+            arrayList_sublist.add(vulList.get(i));
+        }
+//        SimCode simCode = new SimCode();
+//        Object[] res_clustering = simCode.clustering(arrayList_sublist, 5);
+//
+//        ArrayList<Cluster> clusters =(ArrayList<Cluster>) res_clustering[0];
+//
+//        Sampling sampling = new Sampling();
+//        List<List<Vulnerability>> res = sampling.getSamples(clusters);
+//        int count = 0;
+//        int clusterid = 1;
+//        for(List<Vulnerability> list: res){
+//            for(Vulnerability vul : list){
+//                Bug bug = vul.convert2Bug();
+//                bug.setCluster(""+clusterid);
+//                count ++;
+////                bugDao.saveAndFlush(bug);
+//            }
+//            clusterid++;
+//        }
+//        System.out.println("count2: " + count);
     }
 
 

@@ -5,6 +5,7 @@ package com.example.demo.Tool;
 import com.example.demo.Dao.BugDao;
 
 import com.example.demo.Entity.Bug;
+import com.example.demo.Entity.Vulnerability;
 import com.example.demo.Sampling.CodeSimilarity;
 import com.example.demo.Sampling.CosineSimilarity;
 import com.example.demo.Sampling.JaccardSimilarity;
@@ -12,7 +13,6 @@ import com.example.demo.Sampling.Sampling;
 
 import com.example.demo.Sampling.clustering.Cluster;
 import com.example.demo.Sampling.clustering.KMedoids;
-import com.example.demo.Sampling.clustering.affinitypropagation.AffinityPropagation;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.*;
@@ -43,15 +43,15 @@ public class SimCode {
 //        List<String> bugs = readTxtFileIntoStringArrList("C:\\Users\\ningl\\IdeaProjects\\SimCode\\src\\main\\java\\com\\ning\\data\\report.txt");
 //
 ////        ArrayList<Vulnerability> samples = new ArrayList<>();
-//        for(int i = 0; i < bugs.size(); i++){
+//        for(int i = 0; i < bugs.tasksize(); i++){
 //            String bug = bugs.get(i);
 //            String[] items = bug.split(",");
-//            String id = items[0];
+//            String taskid = items[0];
 //            int threatlevel = Integer.valueOf(items[1]);
 //            String type = items[2];
 //            String location = items[3];
 //            double prob = Double.valueOf(items[4]);
-//            samples.add(new Vulnerability(id, threatlevel, type, location, prob));
+//            samples.add(new Vulnerability(taskid, threatlevel, type, location, prob));
 //        }
 
 //        SimCode simCode = new SimCode();
@@ -62,8 +62,8 @@ public class SimCode {
 //
 //        Sampling sampling = new Sampling();
 //        List<List<Vulnerability>> res = sampling.getSamples(clusters);
-//        System.out.println("Size1: "+ clusters.size());
-//        System.out.println("Size2: "+ res.size());
+//        System.out.println("Size1: "+ clusters.tasksize());
+//        System.out.println("Size2: "+ res.tasksize());
 
 
 
@@ -73,7 +73,7 @@ public class SimCode {
         getFileList(filedir);
         List<Vulnerability> samples = new ArrayList<Vulnerability>();
         for(List<String> bugs : datalist){
-            String id = bugs.get(0);
+            Long id = Long.valueOf(bugs.get(0));
             int threatlevel = Integer.valueOf(bugs.get(2));
             String type = bugs.get(1);
             String location = bugs.get(3);
@@ -245,7 +245,7 @@ public class SimCode {
     public Object[] clustering(List<Vulnerability> samples, int k){
 
         ArrayList<String> codelist = new ArrayList<>();
-        Map<String, Integer> map = new HashMap<>();
+        Map<Long, Integer> map = new HashMap<>();
         int tmp = 0;
         for(Vulnerability v : samples){
             map.put(v.id, tmp++);
@@ -278,8 +278,8 @@ public class SimCode {
 //        for (AffinityPropagation.ClusterIds clusterId : clusterIdList) {
 //            List<String> idlist = new ArrayList<>();
 //            for (Integer item : clusterId.getDataCenterIdList()) {
-////                text += samples.get(item).id + " ";
-//                idlist.add(samples.get(item).id);
+////                text += samples.get(item).taskid + " ";
+//                idlist.add(samples.get(item).taskid);
 //            }
 //            clusterlist.add(idlist);
 //        }
@@ -288,7 +288,7 @@ public class SimCode {
 //        for(double d : cpap_list){
 //            cp_ap += d;
 //        }
-//        cp_ap = cp_ap / cpap_list.size();
+//        cp_ap = cp_ap / cpap_list.tasksize();
 //        System.out.println("CP: "+cp_ap);
 //        double sp_ap = getSP_AP(clusterlist, simMatrix, map);
 //        System.out.println("SP: "+sp_ap);
@@ -302,8 +302,8 @@ public class SimCode {
         KMedoids km = new KMedoids();
         Object[] res_kmedoids = km.AlgoKmedoids(samples, k);
         ArrayList<Cluster> cluster =(ArrayList<Cluster>) res_kmedoids[0];
-//        System.out.println("NUMBER ID: "+ cluster.get(0).medoid.id);
-//        for(int i = 0; i < cluster.size(); i++){
+//        System.out.println("NUMBER ID: "+ cluster.get(0).medoid.taskid);
+//        for(int i = 0; i < cluster.tasksize(); i++){
 //            System.out.println(cluster.get(i).toString());
 //        }
         List<Double> cp_list = getCP_KMedoids(cluster,simMatrix,map);
@@ -324,7 +324,7 @@ public class SimCode {
         return res_kmedoids;
     }
 
-    public List<Double> getCP_KMedoids(ArrayList<Cluster> cluster, double[][] simi, Map<String, Integer> map){
+    public List<Double> getCP_KMedoids(ArrayList<Cluster> cluster, double[][] simi, Map<Long, Integer> map){
         List<Double> cp = new ArrayList<>();
         for(int i = 0; i < cluster.size(); i++){
             Cluster c = cluster.get(i);
@@ -342,7 +342,7 @@ public class SimCode {
         return cp;
     }
 
-    public List<Double> getCP_AP(List<List<String>> cluster, double[][] simi, Map<String, Integer> map){
+    public List<Double> getCP_AP(List<List<String>> cluster, double[][] simi, Map<Long, Integer> map){
         List<Double> cp = new ArrayList<>();
         for(int i = 0; i < cluster.size(); i++){
             List<String> c = cluster.get(i);
@@ -360,7 +360,7 @@ public class SimCode {
         return cp;
     }
 
-    public double getSP_KMedoids(ArrayList<Cluster> cluster, double[][] simi,  Map<String, Integer> map){
+    public double getSP_KMedoids(ArrayList<Cluster> cluster, double[][] simi,  Map<Long, Integer> map){
         double sum = 0.0;
         for(int i = 0; i < cluster.size(); i++){
             Vulnerability wi = cluster.get(i).medoid;
@@ -381,7 +381,7 @@ public class SimCode {
         return res;
     }
 
-    public double getSP_AP(List<List<String>> cluster, double[][] simi,  Map<String, Integer> map){
+    public double getSP_AP(List<List<String>> cluster, double[][] simi,  Map<Long, Integer> map){
         double sum = 0.0;
         for(int i = 0; i < cluster.size(); i++){
             String wi = cluster.get(i).get(0);
@@ -402,7 +402,7 @@ public class SimCode {
     }
 
 
-    public double getDBI_KMedoids(ArrayList<Cluster> cluster, double[][] simi, List<Double> cp, Map<String, Integer> map){
+    public double getDBI_KMedoids(ArrayList<Cluster> cluster, double[][] simi, List<Double> cp, Map<Long, Integer> map){
         List<Double> db = new ArrayList<>();
         for(int i = 0; i < cluster.size(); i++){
             double ci = cp.get(i);
@@ -429,7 +429,7 @@ public class SimCode {
         return res;
     }
 
-    public double getDBI_AP(List<List<String>> cluster, double[][] simi, List<Double> cp, Map<String, Integer> map){
+    public double getDBI_AP(List<List<String>> cluster, double[][] simi, List<Double> cp, Map<Long, Integer> map){
         List<Double> db = new ArrayList<>();
         for(int i = 0; i < cluster.size(); i++){
             double ci = cp.get(i);

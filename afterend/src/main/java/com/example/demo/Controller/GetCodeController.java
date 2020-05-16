@@ -27,13 +27,11 @@ public class GetCodeController implements GetCodeService {
         return code;
     }
 
-    @RequestMapping(value = "/dataUpdate", method = RequestMethod.POST)
+    @RequestMapping(value = "/probUpdate", method = RequestMethod.GET)
     @ResponseBody
-//    @RequestParam
     @Override
-    public void dataUpdate(String id, boolean res) {
-        getcode.dataUpdate(id, res);
-
+    public void probUpdate(String id, double prob) {
+        getcode.probUpdate(id, prob);
     }
 
     @RequestMapping(value = "/getbugs", method = RequestMethod.GET)
@@ -66,6 +64,26 @@ public class GetCodeController implements GetCodeService {
         return getcode.getGroups();
     }
 
+    @RequestMapping(value = "/getonebug", method = RequestMethod.GET)
+    @ResponseBody
+    @Override
+    public Bug getOneBug(String id) {
+        return getcode.getOneBug(id);
+    }
+
+    @RequestMapping(value = "/reviewpass", method = RequestMethod.GET)
+    @ResponseBody
+    @Override
+    public void reviewPass(String id) {
+        getcode.reviewPass(id);
+    }
+
+    @RequestMapping(value = "/reviewfalse", method = RequestMethod.GET)
+    @ResponseBody
+    @Override
+    public void reviewFalse(String id) {
+        getcode.reviewFalse(id);
+    }
 
 
 }
