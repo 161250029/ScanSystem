@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.example.demo.Dao.BugCollectDao;
 import com.example.demo.Dao.BugInfoDao;
 import com.example.demo.Entity.*;
+import jdk.management.resource.internal.inst.FileOutputStreamRMHooks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,7 +66,6 @@ public class LoadDataController {
     @RequestMapping(value="/getdata" , method = RequestMethod.GET)
     @ResponseBody
     public String getdata(@RequestParam("jarpath")String jarpath) {
-//        jarpath = jarpath.replaceAll("/" , "\\\\");
         System.out.println("draw graph");
         System.out.println(jarpath);
         List<BugCollect> bugCollects = bugCollectDao.findbugsbyjar(jarpath);
@@ -80,6 +80,18 @@ public class LoadDataController {
         String jsonString = JSON.toJSONString(returnGraph);
         System.out.println(jsonString);
         return jsonString;
+    }
+
+    @RequestMapping(value="/getleveldata" , method = RequestMethod.GET)
+    @ResponseBody
+    public List<Integer> getleveldata(@RequestParam("jarpath")String jarpath) {
+        System.out.println("draw level graph");
+        System.out.println(jarpath);
+        List<Integer> result = new ArrayList<>();
+        result.add(bugCollectDao.findBugsByJarAndLevel(jarpath , 3).size());
+        result.add(bugCollectDao.findBugsByJarAndLevel(jarpath , 2).size());
+        result.add(bugCollectDao.findBugsByJarAndLevel(jarpath , 1).size());
+        return result;
     }
 
 }

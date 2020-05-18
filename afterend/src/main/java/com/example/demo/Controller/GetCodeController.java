@@ -37,6 +37,7 @@ public class GetCodeController implements GetCodeService {
     @RequestMapping(value = "/getbugs", method = RequestMethod.GET)
     @ResponseBody
     @Override
+
     public List<Bug> getBugs(String id) {
         return getcode.getBugs(id);
     }
