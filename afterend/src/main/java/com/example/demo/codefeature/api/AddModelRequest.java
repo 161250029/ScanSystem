@@ -1,16 +1,17 @@
 package com.example.demo.codefeature.api;
 
+
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
-class TrainRequest {
+class AddModelRequest {
 
-    private String outputPath;
-    private String modelPath;
-    private int epochNum;
+    private List<String> models;
     private int featureSize;
-    private boolean valid;
+    private int epochNum;
 
 }

@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class PageController {
     @RequestMapping("/Hello")
@@ -27,7 +29,8 @@ public class PageController {
     }
 
     @RequestMapping("/codeFeature")
-    public String codeFeature() {
-        return "qmy";
+    public String codeFeature(@RequestParam String path, HttpSession session) {
+        session.setAttribute("predictPath", path);
+        return "index.html";
     }
 }

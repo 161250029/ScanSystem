@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 public class FileTools {
 
     private static final Logger logger = LoggerFactory.getLogger(FileTools.class);
-    public static int vectorSize = 16;
 
     public static void checkOutputDir(String outputDir) {
         File target = new File(outputDir);
@@ -56,7 +55,7 @@ public class FileTools {
         return result;
     }
 
-    public static ExtractResult saveFeature(File javaFile, String outputDir) {
+    public static ExtractResult saveFeature(File javaFile, String outputDir, int featureSize) {
         ExtractResult extractResult = new ExtractResult();
         String javaFileName = javaFile.getName().split("\\.")[0];
         extractResult.setName(javaFileName);
@@ -74,14 +73,14 @@ public class FileTools {
                     List<String> astWords = ASTFeature.extract(m);
                     extractResult.setSequence(astWords.size());
                     FileTools.saveASTWords(astWords, outputDir, outputName);
-                    FileTools.saveWordVector(astWords, outputDir, outputName);
+                    FileTools.saveWordVector(astWords, outputDir, outputName, featureSize);
                     BasicBlockGraph graph = CFGFeature.extractBasicBlocks(m);
                     if (graph == null) {
                         extractResult.setSuccess(false);
                         extractResult.setBasicBlock(0);
                     } else {
                         extractResult.setBasicBlock(graph.getBasicBlocks().size());
-                        FileTools.saveGraph(graph, outputDir, outputName);
+                        FileTools.saveGraph(graph, outputDir, outputName, featureSize);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -119,16 +118,16 @@ public class FileTools {
         writer.close();
     }
 
-    private static void saveWordVector(List<String> words, String outputDir, String outputName) throws IOException {
+    private static void saveWordVector(List<String> words, String outputDir, String outputName, int featureSize) throws IOException {
         String outputPath = String.join(File.separator, new String[]{outputDir, "WordVector", outputName});
         BufferedWriter writer = new BufferedWriter(new FileWriter(outputPath));
-        for (List<Double> line: Word2VecModel.transformWords(words, vectorSize)) {
+        for (List<Double> line: Word2VecModel.transformWords(words, featureSize)) {
             FileTools.saveList(writer, line);
         }
         writer.close();
     }
 
-    private static void saveGraph(BasicBlockGraph graph, String outputDir, String outputName) throws IOException {
+    private static void saveGraph(BasicBlockGraph graph, String outputDir, String outputName, int featureSize) throws IOException {
         String edgePath = String.join(File.separator, new String[]{outputDir, "Edge", outputName});
         String deepWalkPath = String.join(File.separator, new String[]{outputDir, "DeepWalk", outputName});
         String paragraphVecPath = String.join(File.separator, new String[]{outputDir, "ParagraphVec", outputName});
@@ -139,7 +138,7 @@ public class FileTools {
         }
         writer.close();
 
-        List<List<Double>> deepWalkResult = GraphFeature.extract(graph, vectorSize);
+        List<List<Double>> deepWalkResult = GraphFeature.extract(graph, featureSize);
         if (deepWalkResult.size() > 0) {
             writer = new BufferedWriter(new FileWriter(deepWalkPath));
             for (List<Double> line: deepWalkResult) {
@@ -153,7 +152,7 @@ public class FileTools {
                 .stream()
                 .map(BasicBlock::toString)
                 .collect(Collectors.toList());
-        for (List<Double> line: Word2VecModel.transformParagraph(paragraph, vectorSize)) {
+        for (List<Double> line: Word2VecModel.transformParagraph(paragraph, featureSize)) {
             FileTools.saveList(writer, line);
         }
         writer.close();
@@ -167,3 +166,4 @@ public class FileTools {
         bw.newLine();
     }
 }
+
