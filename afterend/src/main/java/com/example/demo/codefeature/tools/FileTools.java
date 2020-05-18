@@ -58,6 +58,7 @@ public class FileTools {
     public static ExtractResult saveFeature(File javaFile, String outputDir, int featureSize) {
         ExtractResult extractResult = new ExtractResult();
         String javaFileName = javaFile.getName().split("\\.")[0];
+        String parentDir = javaFile.getParent();
         extractResult.setName(javaFileName);
 
         logger.info("File: " + javaFileName);
@@ -69,7 +70,7 @@ public class FileTools {
                 CommentTools.removeComment(m);
                 SymbolTools.nameSubstitute(m);
                 try {
-                    String outputName = javaFileName + "_" + m.getNameAsString() + ".csv";
+                    String outputName = javaFileName + "#" + parentDir + "#" + m.getNameAsString() + ".csv";
                     List<String> astWords = ASTFeature.extract(m);
                     extractResult.setSequence(astWords.size());
                     FileTools.saveASTWords(astWords, outputDir, outputName);

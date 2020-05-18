@@ -1,5 +1,8 @@
 package com.example.demo.codefeature.api;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.example.demo.codefeature.tools.FileTools;
 import com.example.demo.codefeature.tools.PythonTools;
 import org.slf4j.Logger;
@@ -156,6 +159,15 @@ public class ApiController {
 
         String[] params = {pythonPath, "./python/Predict.py", modelPath, tempPath};
         String line = PythonTools.execute(params);
+
+        JSONArray jsonArray = JSON.parseArray(line);
+        for (Object object : jsonArray) {
+            JSONObject o = (JSONObject) object;
+            String[] info = o.getString("name").split("#");
+            String name = info[0];
+            String lineNumber = info[1];
+
+        }
 
         for (String type: new String[]{"Text", "WordVector", "Edge", "DeepWalk", "ParagraphVec"}) {
             new File(tempPath + fileSeparator + "8" + fileSeparator + "False" + fileSeparator + type).delete();
