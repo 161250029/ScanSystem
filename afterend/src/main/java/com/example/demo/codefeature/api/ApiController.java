@@ -3,10 +3,16 @@ package com.example.demo.codefeature.api;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.example.demo.Dao.BugInfoDao;
+import com.example.demo.Dao.VulnerabilityDao;
+import com.example.demo.Entity.BugInfo;
+import com.example.demo.Entity.Vulnerability;
+import com.example.demo.ServiceInterface.VulnerService;
 import com.example.demo.codefeature.tools.FileTools;
 import com.example.demo.codefeature.tools.PythonTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +36,10 @@ public class ApiController {
     private String tempPath;
     @Value("${fileConfig.modelPath}")
     private String modelPath;
+    @Autowired
+    private BugInfoDao bugInfoDao;
+    @Autowired
+    private VulnerService vulnerService;
 
     private List<ModelObject> modelList = new ArrayList<>();
     private String predictPath = "";
@@ -164,9 +174,16 @@ public class ApiController {
         for (Object object : jsonArray) {
             JSONObject o = (JSONObject) object;
             String[] info = o.getString("name").split("#");
+            double max = 0.0;
+            for (String key : o.keySet()) {
+                if (! "name".equals(key)) {
+                    max += o.getDouble(key);
+                }
+            }
             String name = info[0];
             String lineNumber = info[1];
-
+            BugInfo bugInfo = bugInfoDao.findBugsByFileNameAndStart(name, Integer.parseInt(lineNumber));
+            vulnerService.probUpdate(bugInfo.getId(), max / (o.keySet().size() - 1));
         }
 
         for (String type: new String[]{"Text", "WordVector", "Edge", "DeepWalk", "ParagraphVec"}) {

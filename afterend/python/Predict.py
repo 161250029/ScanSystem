@@ -28,23 +28,6 @@ def model_predict(model, data_generator, all_steps, label_generator=None):
     return result
 
 
-def read_wordVector(path, type):
-    x_data = None
-    file_name = []
-    for f in os.listdir(os.path.join(path, type)):
-        data = pd.read_csv(os.path.join(path, type, f), header=None)
-        line = np.array(data.values)
-
-        line = np.pad(line, ((0, seq_len-line.shape[0]), (0, 0)))
-        if x_data is not None:
-            x_data = np.concatenate((x_data, [line]))
-        else:
-            x_data = np.array([line])
-        file_name.append(f)
-
-    return x_data, file_name
-
-
 if __name__ == "__main__":
     model_path = sys.argv[1]
     result_dict = {}
@@ -53,20 +36,22 @@ if __name__ == "__main__":
         if len(f.split(".")) != 2 or f.split(".")[1] != "h5":
             continue
 
-        model_name = f.split(".")[0]
+        model_name = f.split(".")[0].split("_")[0]
+        feature_size = int(f.split(".")[0].split("_")[1])
+        data_path = os.path.join(sys.argv[2], f.split(".")[0].split("_")[1])
 
-        if model_name == "CNN" or model_name == "LSTM":
+        if model_name == "cnn" or model_name == "lstm":
             model = load_model(os.path.join(model_path, f))
-            predict_files = get_feature_files(model_path)
-            predict_generator = vector_generate(sys.argv[1], predict_files, get_config("seq_len"))
-        elif model_name == "DeepWalk_GCN":
+            predict_files = get_feature_files(data_path)
+            predict_generator = vector_generate(data_path, predict_files, get_config("seq_len"))
+        elif model_name == "deepwalk":
             model = load_model(os.path.join(model_path, f), custom_objects={"GraphConv": GraphConv})
-            predict_files = get_feature_files(model_path, "DeepWalk")
-            predict_generator = graph_generate(sys.argv[1], "DeepWalk", predict_files, get_config("node_len"))
-        elif model_name == "Paragraph2Vec_GCN":
+            predict_files = get_feature_files(data_path, "DeepWalk")
+            predict_generator = graph_generate(data_path, "DeepWalk", predict_files, get_config("node_len"))
+        elif model_name == "para2vec":
             model = load_model(os.path.join(model_path, f), custom_objects={"GraphConv": GraphConv})
-            predict_files = get_feature_files(model_path, "ParagraphVec")
-            predict_generator = graph_generate(sys.argv[1], "ParagraphVec", predict_files, get_config("node_len"))
+            predict_files = get_feature_files(data_path, "ParagraphVec")
+            predict_generator = graph_generate(data_path, "ParagraphVec", predict_files, get_config("node_len"))
         else:
             continue
 
@@ -77,7 +62,7 @@ if __name__ == "__main__":
                 if file_name not in result_dict:
                     result_dict[file_name] = {}
                     result_dict[file_name]["name"] = file_name
-                result_dict[file_name][model_name] = row[0]
+                result_dict[file_name][f] = row[0]
             # data, file_names = read_wordVector(model_path, "WordVector")
             #
             # for index, file_name in enumerate(file_names):
