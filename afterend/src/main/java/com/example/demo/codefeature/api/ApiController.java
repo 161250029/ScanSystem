@@ -149,26 +149,29 @@ public class ApiController {
     }
 
     @PostMapping("/predict")
-    public String predict(@RequestBody List<String> modelChoose, HttpSession session) {
-        String newPath = (String) session.getAttribute("predictPath");
-        if (predictPath.equals(newPath)) return predictResult;
-        else predictPath = newPath;
-
+    public String predict(@RequestBody JSONObject request, HttpSession session) {
+//        String newPath = (String) session.getAttribute("predictPath");
+//        if (predictPath.equals(newPath)) return predictResult;
+//        else predictPath = newPath;
+//
         String fileSeparator = File.separator;
-        FileTools.checkOutputDir(tempPath + fileSeparator + "8" + fileSeparator + "False");
-        FileTools.checkOutputDir(tempPath + fileSeparator + "16" + fileSeparator + "False");
-        FileTools.checkOutputDir(tempPath + fileSeparator + "32" + fileSeparator + "False");
-        List<String> javaFilePaths = FileTools.searchJavaFile((String) session.getAttribute("predictPath"));
-        for (String fileName: javaFilePaths) {
-            FileTools.saveFeature(new File(fileName), tempPath + fileSeparator + "8" + fileSeparator + "False", 8);
-            FileTools.saveFeature(new File(fileName), tempPath + fileSeparator + "16" + fileSeparator + "False", 16);
-            FileTools.saveFeature(new File(fileName), tempPath + fileSeparator + "32" + fileSeparator + "False", 32);
-        }
+//        FileTools.checkOutputDir(tempPath + fileSeparator + "8" + fileSeparator + "False");
+//        FileTools.checkOutputDir(tempPath + fileSeparator + "16" + fileSeparator + "False");
+//        FileTools.checkOutputDir(tempPath + fileSeparator + "32" + fileSeparator + "False");
+//        List<String> javaFilePaths = FileTools.searchJavaFile((String) session.getAttribute("predictPath"));
+//        for (String fileName: javaFilePaths) {
+//            FileTools.saveFeature(new File(fileName), tempPath + fileSeparator + "8" + fileSeparator + "False", 8);
+//            FileTools.saveFeature(new File(fileName), tempPath + fileSeparator + "16" + fileSeparator + "False", 16);
+//            FileTools.saveFeature(new File(fileName), tempPath + fileSeparator + "32" + fileSeparator + "False", 32);
+//        }
 
         String[] params = {pythonPath, "./python/Predict.py", modelPath, tempPath};
         List<String> paramList = Arrays.asList(params);
-        paramList.addAll(modelChoose);
-        String line = PythonTools.execute(paramList.toArray(new String[]{}));
+        JSONArray models = request.getJSONArray("models");
+        for (Object s : models) {
+            paramList.add((String) s);
+        }
+        String line = PythonTools.execute(paramList.toArray(new String[paramList.size()]));
 
         JSONArray jsonArray = JSON.parseArray(line);
         for (Object object : jsonArray) {
