@@ -31,6 +31,6 @@ public class PageController {
     @RequestMapping("/codeFeature")
     public String codeFeature(@RequestParam String path, HttpSession session) {
         session.setAttribute("predictPath", path);
-        return "index.html";
+        return "qmy.html";
     }
 }
