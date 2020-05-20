@@ -13,18 +13,21 @@ seq_len = 256
 def model_predict(model, data_generator, all_steps, label_generator=None):
     result = None
     for i in range(all_steps):
-        predict_y = model.predict_generator(data_generator, steps=1, workers=0, verbose=0)
-        if label_generator is not None:
-            label_y = label_generator.__next__()[1]
-            if result is None:
-                result = np.concatenate((predict_y, label_y), axis=1)
+        try:
+            predict_y = model.predict_generator(data_generator, steps=1, workers=0, verbose=0)
+            if label_generator is not None:
+                label_y = label_generator.__next__()[1]
+                if result is None:
+                    result = np.concatenate((predict_y, label_y), axis=1)
+                else:
+                    result = np.concatenate((result, np.concatenate((predict_y, label_y), axis=1)))
             else:
-                result = np.concatenate((result, np.concatenate((predict_y, label_y), axis=1)))
-        else:
-            if result is None:
-                result = np.array(predict_y)
-            else:
-                result = np.concatenate((result, np.array(predict_y)))
+                if result is None:
+                    result = np.array(predict_y)
+                else:
+                    result = np.concatenate((result, np.array(predict_y)))
+        except:
+            continue
     return result
 
 
