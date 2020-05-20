@@ -84,7 +84,7 @@
                 >发布众审</el-button>
               </router-link>
 
-              <router-link to="/codeFeature?/root/testcode">
+              <router-link to="8080/codeFeature?path=/root/testcode">
                 <el-button
                   size="mini"
                   type="danger"
