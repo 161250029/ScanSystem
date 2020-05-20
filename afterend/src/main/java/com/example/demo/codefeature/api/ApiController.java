@@ -168,14 +168,15 @@ public class ApiController {
         String[] params = {pythonPath, "./python/Predict.py", modelPath, tempPath};
         List<String> paramList = Arrays.asList(params);
         JSONArray models = request.getJSONArray("models");
-        for (Object s : models) {
-            paramList.add((String) s);
+        for (int i = 0; i < models.size(); i ++) {
+            paramList.add(models.getString(i));
         }
         String line = PythonTools.execute(paramList.toArray(new String[paramList.size()]));
+        System.out.println(line);
 
         JSONArray jsonArray = JSON.parseArray(line);
-        for (Object object : jsonArray) {
-            JSONObject o = (JSONObject) object;
+        for (int i = 0; i < jsonArray.size(); i ++) {
+            JSONObject o = jsonArray.getJSONObject(i);
             String[] info = o.getString("name").split("#");
             double max = 0.0;
             for (String key : o.keySet()) {
