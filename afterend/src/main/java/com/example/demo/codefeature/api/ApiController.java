@@ -4,9 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.Dao.BugInfoDao;
-import com.example.demo.Dao.VulnerabilityDao;
 import com.example.demo.Entity.BugInfo;
-import com.example.demo.Entity.Vulnerability;
 import com.example.demo.ServiceInterface.VulnerService;
 import com.example.demo.codefeature.tools.FileTools;
 import com.example.demo.codefeature.tools.PythonTools;
@@ -19,9 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api")
@@ -166,7 +164,7 @@ public class ApiController {
 //        }
 
         String[] params = {pythonPath, "./python/Predict.py", modelPath, tempPath};
-        List<String> paramList = Arrays.asList(params);
+        List<String> paramList = Stream.of(params).collect(Collectors.toList());
         JSONArray models = request.getJSONArray("models");
         for (int i = 0; i < models.size(); i ++) {
             paramList.add(models.getString(i));
