@@ -5,7 +5,6 @@ from keras.callbacks import Callback
 from keras_gcn import GraphConv
 from Config import get_config
 import os
-import random
 import json
 import sys
 import itertools
@@ -29,7 +28,6 @@ def get_feature_files(output_path, node_type="WordVector"):
 
 
 def feature_generate(output_path, feature_type, files, len_limit):
-    num = 0
     while True:
         x = []
         y = []
@@ -58,14 +56,12 @@ def feature_generate(output_path, feature_type, files, len_limit):
 
             x.append(x_batch)
             y.append([1, 0] if label == "False" else [0, 1])
-            num += 1
 
-            if num == get_config("batch_size"):
+            if len(x) == get_config("batch_size"):
                 # print(np.array(x).shape)
                 yield np.array(x), np.array(y)
                 x.clear()
                 y.clear()
-                num = 0
 
 
 def vector_generate(output_path, files, seq_len):

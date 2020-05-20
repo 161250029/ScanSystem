@@ -7,27 +7,22 @@ import sys
 import pandas as pd
 import numpy as np
 
-seq_len = 256
-
 
 def model_predict(model, data_generator, all_steps, label_generator=None):
     result = None
     for i in range(all_steps):
-        try:
-            predict_y = model.predict_generator(data_generator, steps=1, workers=0, verbose=0)
-            if label_generator is not None:
-                label_y = label_generator.__next__()[1]
-                if result is None:
-                    result = np.concatenate((predict_y, label_y), axis=1)
-                else:
-                    result = np.concatenate((result, np.concatenate((predict_y, label_y), axis=1)))
+        predict_y = model.predict_generator(data_generator, steps=1, workers=0, verbose=0)
+        if label_generator is not None:
+            label_y = label_generator.__next__()[1]
+            if result is None:
+                result = np.concatenate((predict_y, label_y), axis=1)
             else:
-                if result is None:
-                    result = np.array(predict_y)
-                else:
-                    result = np.concatenate((result, np.array(predict_y)))
-        except:
-            continue
+                result = np.concatenate((result, np.concatenate((predict_y, label_y), axis=1)))
+        else:
+            if result is None:
+                result = np.array(predict_y)
+            else:
+                result = np.concatenate((result, np.array(predict_y)))
     return result
 
 
@@ -69,13 +64,6 @@ if __name__ == "__main__":
                     result_dict[file_name] = {}
                     result_dict[file_name]["name"] = file_name
                 result_dict[file_name][f] = row[0]
-            # data, file_names = read_wordVector(model_path, "WordVector")
-            #
-            # for index, file_name in enumerate(file_names):
-            #     if file_name not in result_dict:
-            #         result_dict[file_name] = {}
-            #         result_dict[file_name]["name"] = file_name.split(".")[0]
-            #     result_dict[file_name][model_name] = predict_y[index][0]
 
     result = str(list(result_dict.values()))
     print(result.replace("'", "\""))
