@@ -14,7 +14,7 @@ public interface BugInfoDao extends JpaRepository<BugInfo, Long> {
     public List<BugInfo> findbugsByFileName(@Param("filename") String filename);
 
     @Query(value = "select b from BugInfo b where b.SourceFile = :filename and b.ToolName = :toolname")
-    public List<BugInfo> findbugsByFileNameAndToolName(@Param("filename") String filename , @Param("toolname") String toolname);
+    public List<BugInfo> findbugsByFileNameAndToolName(@Param("filename") String filename, @Param("toolname") String toolname);
 
     @Query(value = "select b from BugInfo b where b.ToolName = :toolname")
     public List<BugInfo> findBugsByToolName(@Param("toolname") String toolname);
@@ -29,7 +29,7 @@ public interface BugInfoDao extends JpaRepository<BugInfo, Long> {
     public List<BugInfo> findBugsByStart(@Param("start") int start);
 
     @Query(value = "select b from BugInfo b where b.SourceFile = :filename and b.start = :start")
-    public BugInfo findBugsByFileNameAndStart(@Param("filename") String filename ,@Param("start") int start);
+    public List<BugInfo> findBugsByFileNameAndStart(@Param("filename") String filename, @Param("start") int start);
 
 
 }
