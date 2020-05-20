@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,11 +47,8 @@ public class ApiController {
     private String predictResult = "";
 
     @PostMapping("/addModel")
-    public void addModel(@RequestBody AddModelRequest request) {
-        for (String name: request.getModels()) {
-            this.modelList.add(new ModelObject(name, request.getFeatureSize(),
-                    request.getEpochNum(), ModelObject.NOT_TRAINING));
-        }
+    public void addModel(@RequestBody ModelObject model) {
+        this.modelList.add(model);
     }
 
     @GetMapping("/trainList")
@@ -151,7 +149,7 @@ public class ApiController {
     }
 
     @PostMapping("/predict")
-    public String predict(HttpSession session) {
+    public String predict(@RequestBody List<String> modelChoose, HttpSession session) {
         String newPath = (String) session.getAttribute("predictPath");
         if (predictPath.equals(newPath)) return predictResult;
         else predictPath = newPath;
@@ -168,7 +166,9 @@ public class ApiController {
         }
 
         String[] params = {pythonPath, "./python/Predict.py", modelPath, tempPath};
-        String line = PythonTools.execute(params);
+        List<String> paramList = Arrays.asList(params);
+        paramList.addAll(modelChoose);
+        String line = PythonTools.execute(paramList.toArray(new String[]{}));
 
         JSONArray jsonArray = JSON.parseArray(line);
         for (Object object : jsonArray) {

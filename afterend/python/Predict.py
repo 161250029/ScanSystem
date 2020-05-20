@@ -33,10 +33,13 @@ def model_predict(model, data_generator, all_steps, label_generator=None):
 
 if __name__ == "__main__":
     model_path = sys.argv[1]
+    model_choose = set(sys.argv[3:])
     result_dict = {}
 
     for f in os.listdir(model_path):
         if len(f.split(".")) != 2 or f.split(".")[1] != "h5":
+            continue
+        if f not in model_choose:
             continue
 
         model_name = f.split(".")[0].split("_")[0]

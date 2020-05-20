@@ -2,8 +2,8 @@ package com.example.demo.Sampling;
 
 
 
+import com.example.demo.Entity.Vulnerability;
 import com.example.demo.Sampling.clustering.Cluster;
-import com.example.demo.Tool.Vulnerability;
 
 import java.util.ArrayList;
 import java.util.HashMap;
