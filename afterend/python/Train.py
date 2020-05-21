@@ -143,8 +143,8 @@ if __name__ == "__main__":
             #    history = model.fit_generator(item["generator"], steps_per_epoch=item["steps"],
             #                                  epochs=epoch_num, verbose=0).history
             history["name"] = item["name"]
-            history["value1"] = item["val_accuracy"][-1]
-            history["value2"] = item["val_accuracy"][-1]
+            history["value1"] = history["val_accuracy"][-1]
+            history["value2"] = history["val_accuracy"][-1]
             model.save(os.path.join(model_path, "_".join([item["name"], str(feature_size), str(epoch_num)]) + ".h5"))
             with open(os.path.join(model_path, "_".join([item["name"], str(feature_size), str(epoch_num)])), 'w') as f:
                 f.write(str(history).replace("'", "\""))

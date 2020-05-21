@@ -159,7 +159,7 @@ public class ApiController {
             FileTools.checkOutputDir(tempDir.getAbsolutePath() + separator + "8" + separator + "False");
             FileTools.checkOutputDir(tempDir.getAbsolutePath() + separator + "16" + separator + "False");
             FileTools.checkOutputDir(tempDir.getAbsolutePath() + separator + "32" + separator + "False");
-            List<String> javaFilePaths = FileTools.searchJavaFile((String) session.getAttribute("predictPath"));
+            List<String> javaFilePaths = FileTools.searchJavaFile(predictPath);
             for (String fileName: javaFilePaths) {
                 FileTools.saveFeature(new File(fileName), tempDir.getAbsolutePath() + separator + "8" + separator + "False", 8);
                 FileTools.saveFeature(new File(fileName), tempDir.getAbsolutePath() + separator + "16" + separator + "False", 16);
@@ -167,7 +167,7 @@ public class ApiController {
             }
         }
 
-        String[] params = {pythonPath, "./python/Predict.py", modelPath, tempPath};
+        String[] params = {pythonPath, "./python/Predict.py", modelPath, tempDir.getAbsolutePath()};
         List<String> paramList = Stream.of(params).collect(Collectors.toList());
         JSONArray models = request.getJSONArray("models");
         for (int i = 0; i < models.size(); i ++) {
