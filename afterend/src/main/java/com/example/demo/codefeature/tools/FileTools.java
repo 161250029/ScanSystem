@@ -25,12 +25,12 @@ public class FileTools {
     public static void checkOutputDir(String outputDir) {
         File target = new File(outputDir);
         if (! target.exists()) {
-            target.mkdir();
+            target.mkdirs();
         }
         for (String type: new String[]{"Text", "WordVector", "Edge", "DeepWalk", "ParagraphVec"}) {
             target = new File(outputDir + File.separator + type);
             if (! target.exists()) {
-                target.mkdir();
+                target.mkdirs();
             }
         }
     }

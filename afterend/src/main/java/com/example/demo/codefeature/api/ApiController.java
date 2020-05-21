@@ -3,9 +3,8 @@ package com.example.demo.codefeature.api;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.demo.Dao.BugInfoDao;
-import com.example.demo.Entity.BugInfo;
 import com.example.demo.ServiceInterface.VulnerService;
+import com.example.demo.api.SearchBugIdService;
 import com.example.demo.codefeature.tools.FileTools;
 import com.example.demo.codefeature.tools.PythonTools;
 import org.slf4j.Logger;
@@ -36,7 +35,7 @@ public class ApiController {
     @Value("${fileConfig.modelPath}")
     private String modelPath;
     @Autowired
-    private BugInfoDao bugInfoDao;
+    private SearchBugIdService searchBugIdService;
     @Autowired
     private VulnerService vulnerService;
 
@@ -148,20 +147,25 @@ public class ApiController {
 
     @PostMapping("/predict")
     public String predict(@RequestBody JSONObject request, HttpSession session) {
-//        String newPath = (String) session.getAttribute("predictPath");
-//        if (predictPath.equals(newPath)) return predictResult;
-//        else predictPath = newPath;
+        String newPath = (String) session.getAttribute("predictPath");
+        if (predictPath.equals(newPath)) return predictResult;
+        else predictPath = newPath;
 //
-        String fileSeparator = File.separator;
-//        FileTools.checkOutputDir(tempPath + fileSeparator + "8" + fileSeparator + "False");
-//        FileTools.checkOutputDir(tempPath + fileSeparator + "16" + fileSeparator + "False");
-//        FileTools.checkOutputDir(tempPath + fileSeparator + "32" + fileSeparator + "False");
-//        List<String> javaFilePaths = FileTools.searchJavaFile((String) session.getAttribute("predictPath"));
-//        for (String fileName: javaFilePaths) {
-//            FileTools.saveFeature(new File(fileName), tempPath + fileSeparator + "8" + fileSeparator + "False", 8);
-//            FileTools.saveFeature(new File(fileName), tempPath + fileSeparator + "16" + fileSeparator + "False", 16);
-//            FileTools.saveFeature(new File(fileName), tempPath + fileSeparator + "32" + fileSeparator + "False", 32);
-//        }
+        String separator = File.separator;
+        File predictDir = new File(predictPath);
+        File tempDir = new File(tempPath + separator + predictDir.getName());
+        if (! tempDir.exists()) {
+            tempDir.mkdir();
+            FileTools.checkOutputDir(tempDir.getAbsolutePath() + separator + "8" + separator + "False");
+            FileTools.checkOutputDir(tempDir.getAbsolutePath() + separator + "16" + separator + "False");
+            FileTools.checkOutputDir(tempDir.getAbsolutePath() + separator + "32" + separator + "False");
+            List<String> javaFilePaths = FileTools.searchJavaFile((String) session.getAttribute("predictPath"));
+            for (String fileName: javaFilePaths) {
+                FileTools.saveFeature(new File(fileName), tempDir.getAbsolutePath() + separator + "8" + separator + "False", 8);
+                FileTools.saveFeature(new File(fileName), tempDir.getAbsolutePath() + separator + "16" + separator + "False", 16);
+                FileTools.saveFeature(new File(fileName), tempDir.getAbsolutePath() + separator + "32" + separator + "False", 32);
+            }
+        }
 
         String[] params = {pythonPath, "./python/Predict.py", modelPath, tempPath};
         List<String> paramList = Stream.of(params).collect(Collectors.toList());
@@ -184,16 +188,14 @@ public class ApiController {
             }
             String name = info[0];
             String lineNumber = info[1];
-            BugInfo bugInfo = bugInfoDao.findBugsByFileNameAndStart(name, Integer.parseInt(lineNumber));
-            vulnerService.probUpdate(bugInfo.getId(), max / (o.keySet().size() - 1));
+            vulnerService.probUpdate(searchBugIdService.getBugId(name, Integer.parseInt(lineNumber)), max / (o.keySet().size() - 1));
         }
 
-        for (String type: new String[]{"Text", "WordVector", "Edge", "DeepWalk", "ParagraphVec"}) {
-            new File(tempPath + fileSeparator + "8" + fileSeparator + "False" + fileSeparator + type).delete();
-            new File(tempPath + fileSeparator + "16" + fileSeparator + "False" + fileSeparator + type).delete();
-            new File(tempPath + fileSeparator + "32" + fileSeparator + "False" + fileSeparator + type).delete();
-        }
-
+//        for (String type: new String[]{"Text", "WordVector", "Edge", "DeepWalk", "ParagraphVec"}) {
+//            new File(tempPath + separator + "8" + separator + "False" + separator + type).delete();
+//            new File(tempPath + separator + "16" + separator + "False" + separator + type).delete();
+//            new File(tempPath + separator + "32" + separator + "False" + separator + type).delete();
+//        }
         predictResult = line;
         return line;
     }
