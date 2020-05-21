@@ -10,6 +10,9 @@ import java.util.List;
 public interface GetCodeService {
     public String getCodeService(String id, String path);
 
+    public String getCodeSlice(String id, String path);
+
+
     public void probUpdate(String id, double prob);
 
     public List<Bug> getBugs(String groupid);

@@ -27,6 +27,15 @@ public class GetCodeController implements GetCodeService {
         return code;
     }
 
+    @RequestMapping(value = "/getslice", method = RequestMethod.GET)
+    @ResponseBody
+    @Override
+    public String getCodeSlice(String id, String path) {
+        String code = getcode.getCodeSlice(id, path);
+        return code;
+    }
+
+
     @RequestMapping(value = "/probUpdate", method = RequestMethod.GET)
     @ResponseBody
     @Override
@@ -37,7 +46,6 @@ public class GetCodeController implements GetCodeService {
     @RequestMapping(value = "/getbugs", method = RequestMethod.GET)
     @ResponseBody
     @Override
-
     public List<Bug> getBugs(String id) {
         return getcode.getBugs(id);
     }

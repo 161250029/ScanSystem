@@ -23,18 +23,35 @@ public class GetCodeImpl implements GetCodeService {
         Long dataid = Long.valueOf(id);
         Bug bug = bugDao.findById(dataid).get();
         String filepath = bug.getCode().replaceAll("\\\\","/");
-
-//        String[] tmp = path.split("Desktop");
-//        path = "/root"+tmp[1].substring(1);
-//        System.out.println("path1: "+path);
-//        path. replace('\\','/') ;
-//        System.out.println("path2-20: "+path);
         String[] tmp = filepath.split("Desktop");
         String tmp1 = tmp[1];
         path = "/root"+tmp1;
-////        path = "/root"+path;
-//        System.out.println("??? ");
-//        System.out.println("path3: "+path);
+
+        File file = new File(path);
+        String content = "";
+        String line = null;
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(file)); // 与上等效
+            while (null != (line = br.readLine()) ) {
+                content += line + "\n";
+            }
+            br.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        System.out.println("code: "+ content);
+        return content;
+    }
+
+    @Override
+    public String getCodeSlice(String id, String path) {
+        Long dataid = Long.valueOf(id);
+        Bug bug = bugDao.findById(dataid).get();
+        String filepath = bug.getCode().replaceAll("\\\\","/");
+        String[] tmp = filepath.split("BugSlice");
+        String tmp1 = tmp[1];
+        path = "/root/predict"+tmp1;
 
         File file = new File(path);
         String content = "";
